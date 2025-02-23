@@ -17,3 +17,4 @@ if (n <= 0) {
 } else {
     alert(pow(x, n));
 }
+
