@@ -1,13 +1,23 @@
 const input = document.querySelector("input");
-const addButton = document.getElementById("input-button");
+const addbutton = document.getElementById("input-button");
 const todos = document.getElementById("todo-list");
 const noContent = document.getElementById("no-content");
+document.getElementById("title").style.backgroundColor = 'red';
+
 let todosJson = JSON.parse(localStorage.getItem("todos")) || [];
 
 showTodos();
 
 function getTodoHtml(item, index) {
-    let checked = item.status == "done" ? "checked" : "";
+    let checked = "";
+    if (item.status === "done") {
+        checked = "checked";
+    }
+    
+    let checkedClass = "";
+    if (item.status === "done") {
+        checkedClass = "checked";
+    }
     return `
     <li class="todo">
       <label for="${index}">
@@ -20,22 +30,20 @@ function getTodoHtml(item, index) {
 }
 
 function showTodos() {
-    if (todosJson.length == 0) {
-        todos.innerHTML = "";
-        noContent.style.display = 'flex';
-    } else {
-        todos.innerHTML = todosJson.map(getTodoHtml).join('');
-        noContent.style.display = 'none';
-    }
+    todos.innerHTML = todosJson.map(getTodoHtml).join("");
+    noContent.style.display = todosJson.length ? "none" : "flex";
 }
 
+
 input.addEventListener("keyup", e => {
-    let todo = input.value.trim();
-    if (!todo || e.key != "Enter") {
-        return;
+    if (e.key === "Enter") {
+        let todo = input.value.trim();
+        if (todo) {
+            addTodo(todo);
+        }
     }
-    addTodo(todo);
 });
+
 addButton.addEventListener("click", () => {
     let todo = input.value.trim();
     if (!todo) {
